@@ -1,4 +1,11 @@
-char *_getenv(const char *name)
+#include "main.h"
+/**
+ * _getenv: function to get path variable from environ
+ * @name: pointer to character
+ * Return: the global variable PATH
+*/
+
+char *_getenv(char *name)
 {
     extern char **environ;
     int i = 0;

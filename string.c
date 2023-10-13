@@ -22,30 +22,24 @@ int _strlen(char *s)
  *
  * Return: pointer to destination
  */
-char *_strncpy(char *dest, char *src, int n)
-
+char *_strcpy(char *dest, char *src)
 {
-	int i;
+	int i = 0;
 
-	for (i = 0; i < n && src[i] != '\0'; i++)
+	if (dest == src || src == 0)
+		return (dest);
+	while (src[i])
 	{
 		dest[i] = src[i];
-	}
-	while (i < n)
-	{
-		dest[i] = '\0';
 		i++;
 	}
+	dest[i] = 0;
 	return (dest);
 }
-
 /**
  * _strcmp - check the code
- *
  * @s1:function input
- *
  * @s2: function input
- *
  * Return: Always 0.
  */
 

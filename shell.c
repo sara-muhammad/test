@@ -35,14 +35,14 @@ char **parse_string(char *buf, size_t r_bytes)
     char *token;
     int i = 0;
     int no_of_tokens = 0;
-    char **array;
+    char *array;
     char **args;
     
-    array = malloc(sizeof(char *) * r_bytes);
+    array = malloc(sizeof(char ) * r_bytes);
     if (array == NULL)
     {
         perror("memory allocation error");
-        return (-1);
+        return (NULL);
     }
     _strcpy(array, buf);
     token = strtok(buf,"\t\n");
@@ -52,7 +52,7 @@ char **parse_string(char *buf, size_t r_bytes)
         token = strtok(NULL, "\t\n");
     }
     no_of_tokens++;
-    argv = malloc(sizeof(char *) * no_of_tokens);
+    args = malloc(sizeof(char *) * no_of_tokens);
     token = strtok(array, "\t\n");
     while (token != NULL)
     {
