@@ -12,6 +12,8 @@
 int _strlen(char *s);
 char *_strncpy(char *dest, char *src, int n);
 int _strcmp(char *s1, char *s2);
+char *_strdup(const char *str);
+char *_strncat(char *dest, char *src);
 void _isatty(void);
 void _EOF(int len, char *buff);
 char **parse_string(char *buf, size_t r_bytes);

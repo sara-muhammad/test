@@ -14,7 +14,7 @@ void execute_program(char **argv)
     {
         cmd = argv[0];
 
-        actual_cmd = get_location(cmd);
+        actual_cmd = get_path(cmd);
         if (execve(actual_cmd, argv, NULL) == -1)
         {
             perror("Error:");

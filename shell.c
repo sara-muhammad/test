@@ -15,6 +15,7 @@ void _isatty(void)
 * @len: return value of getline function
 * @buff: buffer
  */
+
 void _EOF(int len, char *buff)
 {
 	(void)buff;

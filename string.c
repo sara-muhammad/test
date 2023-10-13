@@ -58,3 +58,45 @@ int _strcmp(char *s1, char *s2)
 	}
 	return (*s1 - *s2);
 }
+
+/**
+ * _strdup - duplicates a string
+ * @str: the string to duplicate
+ *
+ * Return: pointer to the duplicated string
+ */
+char *_strdup(const char *str)
+{
+	int length = 0;
+	char *ret;
+
+	if (str == NULL)
+		return (NULL);
+	while (*str++)
+		length++;
+	ret = malloc(sizeof(char) * (length + 1));
+	if (!ret)
+		return (NULL);
+	for (length++; length--;)
+		ret[length] = *--str;
+	return (ret);
+}
+
+/**
+ * _strncat - concatenates two strings
+ * @dest: the destination buffer
+ * @src: the source buffer
+ *
+ * Return: pointer to destination buffer
+ */
+char *_strncat(char *dest, char *src)
+{
+	char *str = dest;
+
+	while (*dest)
+		dest++;
+	while (*src)
+		*dest++ = *src++;
+	*dest = *src;
+	return (str);
+}
