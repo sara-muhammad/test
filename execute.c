@@ -1,24 +1,26 @@
 #include "main.h"
 
 /**
- * execute_programm: function extract the command and execute it
- * @argv: pointer to array of args
-*/
+ * execute - execute command path, child process
+ * @args: arguments
+ * Return: exit status
+ */
 
-void execute_program(char **argv)
+int execute(char **args)
 {
-    char *cmd = NULL;
-    char *actual_cmd = NULL;
+	int id = fork(), status;
 
-    if (argv)
-    {
-        cmd = argv[0];
+	if (id == 0)
+	{
+		if (execve(args[0], args, environ) == -1)
+			perror("Error");
+	}
+	else
+	{
+		wait(&status);
+		if (WIFEXITED(status))
+			status = WEXITSTATUS(status);
+	}
 
-        actual_cmd = get_path(cmd);
-        if (execve(actual_cmd, argv, NULL) == -1)
-        {
-            perror("Error:");
-        }
-    }
-    
+	return (status);
 }

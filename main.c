@@ -1,37 +1,50 @@
 #include "main.h"
 
 /**
- * main - entry point
- * @ac: arg count
- * @argv: arg vector
- *
- * Return: 0 on success, 1 on error
+ * main - open shell, project base
+ * Return: int
  */
-int main (void)
-{
-    size_t buf_size = 0; 
-    size_t read_bytes;
-    int status;
-    pid_t child_pid;
-    char *input_buf = NULL;
-    char **argv;
 
-    while (1)
-    {
-        _isatty();
-        read_bytes = getline(&input_buf, &buf_size, stdin);
-        _EOF(read_bytes, input_buf);
-        argv= parse_string(input_buf, read_bytes);
-        child_pid = fork();
-        if (child_pid == 0)
-        {
-            execute_program(argv);
-        }
-        else
-        {
-            wait(&status);
-        }
-    }
-    free(input_buf);
-    return (0);
+int main(void)
+{
+	char *buff = NULL, **args;
+	size_t read_size = 0;
+	ssize_t buff_size = 0;
+	int exit_status = 0;
+
+	while (1)
+	{
+		if (isatty(0))
+			printf("hsh$ ");
+
+		buff_size = getline(&buff, &read_size, stdin);
+		if (buff_size == -1 || _strcmp("exit\n", buff) == 0)
+		{
+			free(buff);
+			break;
+		}
+		buff[buff_size - 1] = '\0';
+
+		if (_strcmp("env", buff) == 0)
+		{
+			_env();
+			continue;
+		}
+
+		if (empty_line(buff) == 1)
+		{
+			exit_status = 0;
+			continue;
+		}
+
+		args = _split(buff, " ");
+		args[0] = search_path(args[0]);
+
+		if (args[0] != NULL)
+			exit_status = execute(args);
+		else
+			perror("Error");
+		free(args);
+	}
+	return (exit_status);
 }
