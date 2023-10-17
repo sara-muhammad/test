@@ -7,44 +7,64 @@
  */
 
 char *search_path(char *command)
-{
-	char *path = _getenv("PATH"), *path_cpy;
-	char **path_split;
-	char *path_concat = NULL;
-	int i = 0, path_len = 0;
-	struct stat info;
+{    
+	const char* path = getenv("PATH");
+    char* path_cpy = strdup(path);
+    char* path_concat = NULL;
+    char** path_split = NULL;
+	char* token;
+    int i = 0, j;
 
-	if (stat(command, &info) == 0)
-		return (command);
+    struct stat info;
 
-	path_cpy = malloc(_strlen(path) + 1);
-
-	path_cpy = _strcpy(path_cpy, path);
-	path_split = _split(path_cpy, ":");
-
-	while (path_split[i])
+    if (stat(command, &info) == 0)
 	{
-		path_len = _strlen(path_split[i]);
+        free(path_cpy);
+        return strdup(command);
+    }
 
-		if (path_split[i][path_len - 1] != '/')
-			path_concat = _strcat(path_split[i], "/");
-
-		path_concat = _strcat(path_split[i], command);
-
-		if (stat(path_concat, &info) == 0)
-			break;
-
-		i++;
-	}
-
-	free(path_cpy);
-
-	if (!path_split[i])
+    path_split = malloc(sizeof(char*) * 100);
+	if (path_split == NULL)
 	{
-		free(path_split);
-		return (NULL);
-	}
+        free(path_cpy);
+        return NULL;
+    }
 
-	free(path_split);
-	return (path_concat);
+    token = strtok(path_cpy, ":");
+    while (token != NULL) {
+        path_split[i++] = strdup(token);
+        token = strtok(NULL, ":");
+    }
+    path_split[i] = NULL;
+
+    for (j = 0; path_split[j] != NULL; j++)
+	{
+        size_t path_len = strlen(path_split[j]);
+        path_concat = malloc(path_len + strlen(command) + 2);
+    	if (path_concat == NULL)
+		{
+            break;
+        }
+        strcpy(path_concat, path_split[j]);
+
+        if (path_concat[path_len - 1] != '/')
+		{
+            strcat(path_concat, "/");
+        }
+
+        strcat(path_concat, command);
+
+        if (stat(path_concat, &info) == 0)
+		{
+            break;
+        }
+
+        free(path_concat);
+        path_concat = NULL;
+    }
+
+    free(path_cpy);
+    free(path_split);
+
+    return path_concat;
 }

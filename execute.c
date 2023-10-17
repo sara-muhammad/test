@@ -1,26 +1,40 @@
 #include "main.h"
 
 /**
- * execute - execute command path, child process
+ * execmd - execute command path, child process
  * @args: arguments
  * Return: exit status
  */
 
-int execute(char **args)
+int execmd(char **args)
 {
-	int id = fork(), status;
+    pid_t pid;
+    int status;
 
-	if (id == 0)
-	{
-		if (execve(args[0], args, environ) == -1)
-			perror("Error");
-	}
-	else
-	{
-		wait(&status);
-		if (WIFEXITED(status))
-			status = WEXITSTATUS(status);
-	}
+    pid = fork();
+    if (pid == -1)
+    {
+        perror("Fork error");
+        exit(EXIT_FAILURE);
+    }
+    else if (pid == 0)
+    {
+        /*Child process*/
+        if (execve(args[0], args, environ) == -1)
+        {
+            perror("Exec error");
+            exit(EXIT_FAILURE);
+        }
+    }
+    else
+    {
+        /*Parent process*/
+        wait(&status);
+        if (WIFEXITED(status))
+        {
+            status = WEXITSTATUS(status);
+        }
+    }
 
-	return (status);
+    return (status);
 }

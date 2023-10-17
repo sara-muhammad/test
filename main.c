@@ -27,11 +27,11 @@ int main(void)
 
 		if (_strcmp("env", buff) == 0)
 		{
-			_env();
+			_envprint();
 			continue;
 		}
 
-		if (empty_line(buff) == 1)
+		if (blank_line(buff) == 1)
 		{
 			exit_status = 0;
 			continue;
@@ -41,7 +41,7 @@ int main(void)
 		args[0] = search_path(args[0]);
 
 		if (args[0] != NULL)
-			exit_status = execute(args);
+			exit_status = execmd(args);
 		else
 			perror("Error");
 		free(args);

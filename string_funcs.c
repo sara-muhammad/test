@@ -41,36 +41,6 @@ char *_strcpy(char *dest, char *src)
 }
 
 /**
- * _split - split string
- * @str: string
- * @sep: separator
- * Return: divided path
- */
-
-char **_split(char *str, char *sep)
-{
-	char *aux, **split_str;
-	int i = 0;
-
-	aux = strtok(str, sep);
-	split_str = (char **)_calloc(100, sizeof(char *));
-
-	if (!split_str)
-	{
-		free(split_str);
-		return (NULL);
-	}
-
-	while (aux)
-	{
-		split_str[i] = aux;
-		aux = strtok(NULL, sep);
-		i++;
-	}
-	return (split_str);
-}
-
-/**
  * _strcat - function that concatenates two strings
  * @dest: string
  * @src: string
@@ -110,4 +80,40 @@ int _strlen(char *s)
 	return (i);
 }
 
+/**
+ * _split - split string
+ * @str: string
+ * @sep: separator
+ * Return: divided path
+ */
 
+char **_split(char *str, char *sep)
+{
+    char **split_str = NULL;
+    int count = 0;
+    int i = 0;
+
+    char *token = strtok(str, sep);
+    while (token != NULL)
+    {
+        count++;
+        token = strtok(NULL, sep);
+    }
+
+    split_str = (char **)calloc(count + 1, sizeof(char *));
+    if (!split_str)
+    {
+        free(split_str);
+        return NULL;
+    }
+
+    token = strtok(str, sep);
+    while (token != NULL)
+    {
+        split_str[i] = strdup(token);
+        token = strtok(NULL, sep);
+        i++;
+    }
+
+    return split_str;
+}
